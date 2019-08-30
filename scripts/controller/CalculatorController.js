@@ -1,19 +1,40 @@
 class CalculatorController {
   constructor() {
-    this._locale = "pt-BR";
-    this._displayCalcEl = document.querySelector("#display");
-    this._dateEl = document.querySelector("#data");
-    this._timeEl = document.querySelector("#hora");
+    this._locale = 'pt-BR';
+    this._displayCalcEl = document.querySelector('#display');
+    this._dateEl = document.querySelector('#data');
+    this._timeEl = document.querySelector('#hora');
     this._currentDate;
     this.initialize();
+    this.initButtonsEvents();
   }
 
   initialize() {
-    this.setDisplayDateTime();
+	this.setDisplayDateTime();
 
     setInterval(() => {
       this.setDisplayDateTime();
     }, 1000);
+  }
+
+  addEventListenerAll(element, events, fn){
+	events.split(' ').forEach(event => {
+		element.addEventListener(event, fn, false);
+	})
+  }
+
+  initButtonsEvents() {
+	let buttons = document.querySelectorAll('#buttons > g, #parts > g');
+
+    buttons.forEach((button, index) => {
+      this.addEventListenerAll(button, 'click drag', e => {
+        console.log(button.className.baseVal.replace('btn-', ''));
+	  });
+	  
+	  this.addEventListenerAll(button, 'mouseover mouseup mousedown', e => {
+        button.style.cursor = 'pointer';
+      });
+    });
   }
 
   setDisplayDateTime() {
